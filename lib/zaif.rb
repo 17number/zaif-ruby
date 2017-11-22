@@ -15,8 +15,11 @@ module Zaif
             @cool_down = opt[:cool_down] || true
             @cool_down_time = opt[:cool_down_time] || 2
             @cert_path = opt[:cert_path] || nil
+            @token = opt[:token] || nil
             @api_key = opt[:api_key] || nil
             @api_secret = opt[:api_secret] || nil
+            @open_timeout = opt[:open_timeout] || 5
+            @read_timeout = opt[:read_timeout] || 15
             @zaif_public_url = "https://api.zaif.jp/api/1/"
             @zaif_trade_url = "https://api.zaif.jp/tapi"
         end
@@ -24,6 +27,10 @@ module Zaif
         def set_api_key(api_key, api_secret)
             @api_key = api_key
             @api_secret = api_secret
+        end
+
+        def set_token(token)
+            @token = token
         end
 
         #
@@ -73,7 +80,15 @@ module Zaif
             json = post_ssl(@zaif_trade_url, "get_info", {})
             return json
         end
-        
+
+        # Get lightweight user infomation.
+        # Need api key.
+        # @return [Hash] Infomation of user.
+        def get_info2
+            json = post_ssl(@zaif_trade_url, "get_info2", {})
+            return json
+        end
+
         # Get your trade history.
         # Avalible options: from. count, from_id, end_id, order, since, end, currency_pair
         # Need api key.
@@ -139,6 +154,24 @@ module Zaif
             return json
         end
 
+        # Get your withdraw histories.
+        # Avalible options: from, count, from_id, end_id, order, since, end
+        # Need api key.
+        def withdraw_history(currency, option = {})
+            option["currency"] = currency
+            json = post_ssl(@zaif_trade_url, "withdraw_history", option)
+            return json
+        end
+
+        # Get your deposit histories.
+        # Avalible options: from, count, from_id, end_id, order, since, end
+        # Need api key.
+        def deposit_history(currency, option = {})
+            option["currency"] = currency
+            json = post_ssl(@zaif_trade_url, "deposit_history", option)
+            return json
+        end
+
         #
         # Class private method
         #
@@ -146,7 +179,7 @@ module Zaif
         private
 
         def check_key
-            if @api_key.nil? or @api_secret.nil?
+            unless @token || (@api_key && @api_secret)
                 raise "You need to set a API key and secret"
             end
         end
@@ -157,8 +190,8 @@ module Zaif
             begin
                 https = Net::HTTP.new(uri.host, uri.port)
                 https.use_ssl = true
-                https.open_timeout = 5
-                https.read_timeout = 15
+                https.open_timeout = @open_timeout
+                https.read_timeout = @read_timeout
                 https.verify_mode = OpenSSL::SSL::VERIFY_PEER
                 https.verify_depth = 5
 
@@ -189,14 +222,19 @@ module Zaif
             begin
                 req = Net::HTTP::Post.new(uri)
                 req.set_form_data(data)
-                req["Key"] = @api_key
-                req["Sign"] = OpenSSL::HMAC::hexdigest(OpenSSL::Digest.new('sha512'), @api_secret, req.body)
+
+                if @token
+                  req['token'] = @token
+                else
+                  req["Key"] = @api_key
+                  req["Sign"] = OpenSSL::HMAC::hexdigest(OpenSSL::Digest.new('sha512'), @api_secret, req.body)
+                end
 
 
                 https = Net::HTTP.new(uri.host, uri.port)
                 https.use_ssl = true
-                https.open_timeout = 5
-                https.read_timeout = 15
+                https.open_timeout = @open_timeout
+                https.read_timeout = @read_timeout
                 https.verify_mode = OpenSSL::SSL::VERIFY_PEER
                 https.verify_depth = 5
 

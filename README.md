@@ -18,10 +18,24 @@ Or install it yourself as:
 
 ## Usage
 
+For api key access:
+
 ```ruby
 require 'zaif'
 
 api = Zaif::API.new(:api_key => ZAIF_KEY, :api_secret => ZAIF_SECRET)
+api.bid("btc", 30760, 0.0001)
+api.ask("btc", 30320, 0.0001)
+
+api.get_info
+```
+
+For oauth token access:
+
+```ruby
+require 'zaif'
+
+api = Zaif::API.new(:token => ZAIF_ACCESS_TOKEN)
 api.bid("btc", 30760, 0.0001)
 api.ask("btc", 30320, 0.0001)
 
