@@ -6,7 +6,7 @@ Zaif API wrapper for ruby.
 
 Add this line to your application's Gemfile:
 
-    gem 'zaif'
+    gem 'zaif', github: "17number/zaif-ruby"
 
 And then execute:
 
