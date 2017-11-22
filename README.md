@@ -19,28 +19,58 @@ Or install it yourself as:
 
 ## Usage
 
-For api key access:
+### Initialize
+
+#### For api key access:
 
 ```ruby
 require 'zaif'
-
 api = Zaif::API.new(:api_key => ZAIF_KEY, :api_secret => ZAIF_SECRET)
-api.bid("btc", 30760, 0.0001)
-api.ask("btc", 30320, 0.0001)
+```
+#### For oauth token access:
 
-api.get_info
+```ruby
+require 'zaif'
+api = Zaif::API.new(:token => ZAIF_ACCESS_TOKEN)
 ```
 
-For oauth token access:
+### APIs
 
+#### Public API
 ```ruby
-require 'zaif'
+api.get_last_price("btc")
+api.get_ticker("btc")
+api.get_trades("btc")
+api.get_depth("btc")
+```
 
-api = Zaif::API.new(:token => ZAIF_ACCESS_TOKEN)
+#### Trade API
+```ruby
+api.get_info
+api.get_info2
+api.get_my_trades
+api.get_active_orders
 api.bid("btc", 30760, 0.0001)
 api.ask("btc", 30320, 0.0001)
+api.bid("btc", 30760, 0.0001, 30780) # with limit
+api.ask("btc", 30320, 0.0001, nil, "comments") # with comments
+api.bid("btc", 30760, 0.0001, 30780, "comments") # with limit and comments
+api.cancel(12345678)
+api.withdraw("btc", "InputAddress", 0.0001)
+api.withdraw_history("btc")
+api.deposit_history("btc")
+```
 
-api.get_info
+#### Futures Public API
+```ruby
+```
+
+#### Leverage Trade API
+```ruby
+```
+
+#### Public Stream API
+```ruby
 ```
 
 ## Contributing
