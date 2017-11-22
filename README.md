@@ -14,7 +14,8 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install zaif
+    $ gem install specific_install
+    $ gem specific_install https://github.com/17number/zaif-ruby.git
 
 ## Usage
 
