@@ -58,7 +58,7 @@ module Zaif
         end
 
         # Get last price of *currency_code* / *counter_currency_code*.
-        # @param [String]  currency_code Base     currency code
+        # @param [String]  currency_code          Base currency code
         # @param [String]  counter_currency_code  Counter currency code
         def get_last_price(currency_code, counter_currency_code = "jpy")
             json = get_ssl(@zaif_public_url + "last_price/" + currency_code + "_" + counter_currency_code)
@@ -66,7 +66,7 @@ module Zaif
         end
 
         # Get ticker of *currency_code* / *counter_currency_code*.
-        # @param [String]  currency_code Base     currency code
+        # @param [String]  currency_code          Base currency code
         # @param [String]  counter_currency_code  Counter currency code
         def get_ticker(currency_code, counter_currency_code = "jpy")
             json = get_ssl(@zaif_public_url + "ticker/" + currency_code + "_" + counter_currency_code)
@@ -74,7 +74,7 @@ module Zaif
         end
 
         # Get trades of *currency_code* / *counter_currency_code*.
-        # @param [String]  currency_code Base     currency code
+        # @param [String]  currency_code          Base currency code
         # @param [String]  counter_currency_code  Counter currency code
         def get_trades(currency_code, counter_currency_code = "jpy")
             json = get_ssl(@zaif_public_url + "trades/" + currency_code + "_" + counter_currency_code)
@@ -86,7 +86,7 @@ module Zaif
         end
 
         # Get depth of *currency_code* / *counter_currency_code*.
-        # @param [String]  currency_code Base     currency code
+        # @param [String]  currency_code          Base currency code
         # @param [String]  counter_currency_code  Counter currency code
         def get_depth(currency_code, counter_currency_code = "jpy")
             json = get_ssl(@zaif_public_url + "depth/" + currency_code + "_" + counter_currency_code)
@@ -174,6 +174,7 @@ module Zaif
         end
 
         # Withdraw funds.
+        # Avalible options: opt_fee, message
         # Need api key.
         def withdraw(currency_code, address, amount, option = {})
             option["currency"] = currency_code
