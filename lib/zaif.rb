@@ -145,26 +145,32 @@ module Zaif
         end
 
         # Issue trade.
+        # Avalible options: limit, comment
         # Need api key.
-        def trade(currency_code, price, amount, action, limit = nil, comment = nil, counter_currency_code = "jpy")
+        def trade(currency_code, price, amount, action, counter_currency_code = "jpy", option: {})
             currency_pair = currency_code + "_" + counter_currency_code
-            params = {:currency_pair => currency_pair, :action => action, :price => price, :amount => amount}
-            params.store(:limit, limit) if limit
-            params.store(:comment, comment) if comment
-            json = post_ssl(@zaif_trade_url, "trade", params)
+            option = option.merge({
+                currency_pair: currency_pair,
+                action: action,
+                price: price,
+                amount: amount,
+            })
+            json = post_ssl(@zaif_trade_url, "trade", option)
             return json
         end
 
         # Issue bid order.
+        # Avalible options: currency_pair
         # Need api key.
-        def bid(currency_code, price, amount, limit = nil, comment = nil, counter_currency_code = "jpy")
-            return trade(currency_code, price, amount, "bid", limit, comment, counter_currency_code)
+        def bid(currency_code, price, amount, counter_currency_code = "jpy", option: {})
+            return trade(currency_code, price, amount, "bid", counter_currency_code, option: option)
         end
 
         # Issue ask order.
+        # Avalible options: currency_pair
         # Need api key.
-        def ask(currency_code, price, amount, limit = nil, comment = nil, counter_currency_code = "jpy")
-            return trade(currency_code, price, amount, "ask", limit, comment, counter_currency_code)
+        def ask(currency_code, price, amount, counter_currency_code = "jpy", option: {})
+            return trade(currency_code, price, amount, "ask", counter_currency_code, option: option)
         end
 
         # Cancel order.

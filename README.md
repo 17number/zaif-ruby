@@ -79,11 +79,13 @@ api.get_my_trades(:since => Time.local(2017, 11, 20).to_i, :end => Time.local(20
 api.get_active_orders # all currency pairs
 api.get_active_orders(:currency_pairs => "btc_jpy") # BTC/JPY
 
-api.bid("btc", 30760, 0.0001)
-api.ask("btc", 30320, 0.0001)
-api.bid("btc", 30760, 0.0001, 30780) # with limit
-api.ask("btc", 30320, 0.0001, nil, "comments") # with comments
-api.bid("btc", 30760, 0.0001, 30780, "comments") # with limit and comments
+api.bid("btc", 30760, 0.0001) # BTC/JPY
+api.ask("btc", 30320, 0.0001) # BTC/JPY
+api.bid("bch", 30320, 0.0001) # BCH/JPY
+api.ask("bch", 0.0001, 0.0001, "btc") # BCH/BTC
+api.bid("btc", 30760, 0.0001, option: {limit: 30780}) # BTC/JPY with limit
+api.ask("bch", 0.0001, 0.0001, "btc", option: {comment: "comment"}) # BCH/BTC with comments
+api.bid("btc", 30760, 0.0001, option: {limit: 30780, comment: "comment"}) # BTC/JPY with limit and comments
 
 api.cancel("btc", 12345678) # BTC/JPY
 api.cancel("bch", 12345678) # BCH/JPY
