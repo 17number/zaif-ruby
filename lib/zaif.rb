@@ -38,6 +38,25 @@ module Zaif
         # Public API
         #
 
+        # Get currencies.
+        # @param [String]  currency_code  Base currency code
+        def get_currencies(currency_code = "all")
+            json = get_ssl(@zaif_public_url + "currencies/" + currency_code)
+            return json
+        end
+
+        # Get currency_pairs.
+        # @param [String]  currency_code          Base currency code
+        # @param [String]  counter_currency_code  Counter currency code
+        def get_currency_pairs(currency_code = "all", counter_currency_code = "jpy")
+            if currency_code == "all"
+                json = get_ssl(@zaif_public_url + "currency_pairs/" + currency_code)
+            else
+                json = get_ssl(@zaif_public_url + "currency_pairs/" + currency_code + "_" + counter_currency_code)
+            end
+            return json
+        end
+
         # Get last price of *currency_code* / *counter_currency_code*.
         # @param [String]  currency_code Base     currency code
         # @param [String]  counter_currency_code  Counter currency code

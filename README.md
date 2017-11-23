@@ -38,6 +38,11 @@ api = Zaif::API.new(:token => ZAIF_ACCESS_TOKEN)
 
 #### Public API
 ```ruby
+api.get_currencies                   # all currencies
+api.get_currencies("btc")
+api.get_currency_pairs               # all currencies
+api.get_currency_pairs("btc")        # BTC/JPY
+api.get_currency_pairs("bch", "btc") # BCH/BTC
 api.get_last_price("btc")
 api.get_ticker("btc")
 api.get_trades("btc")
