@@ -40,7 +40,7 @@ api = Zaif::API.new(:token => ZAIF_ACCESS_TOKEN)
 ```ruby
 api.get_currencies                   # all currencies
 api.get_currencies("btc")
-api.get_currency_pairs               # all currencies
+api.get_currency_pairs               # all currency pairs
 api.get_currency_pairs("btc")        # BTC/JPY
 api.get_currency_pairs("bch", "btc") # BCH/BTC
 api.get_last_price("btc")            # BTC/JPY
@@ -67,7 +67,7 @@ api.bid("btc", 30760, 0.0001, 30780, "comments") # with limit and comments
 api.cancel(12345678)
 api.withdraw("btc", "InputAddress", 0.0001)
 api.withdraw("btc", "InputAddress", 0.0001, :opt_fee => 0.0001) # with fee(for BTC or MONA)
-api.withdraw("btc", "InputAddress", 0.0001, :message => "message") # with message(for XEM)
+api.withdraw("xem", "InputAddress", 0.0001, :message => "message") # with message(for XEM)
 api.withdraw_history("btc")
 api.deposit_history("btc")
 ```
