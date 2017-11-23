@@ -59,6 +59,10 @@ module Zaif
         # @param [String]  counter_currency_code  Counter currency code
         def get_trades(currency_code, counter_currency_code = "jpy")
             json = get_ssl(@zaif_public_url + "trades/" + currency_code + "_" + counter_currency_code)
+            # Convert to datetime
+            json.each do |j|
+                j["datetime"] = Time.at(j["date"].to_i)
+            end
             return json
         end
 
@@ -79,6 +83,8 @@ module Zaif
         # @return [Hash] Infomation of user.
         def get_info
             json = post_ssl(@zaif_trade_url, "get_info", {})
+            # Convert to datetime
+            json["datetime"] = Time.at(json["server_time"])
             return json
         end
 
@@ -87,6 +93,8 @@ module Zaif
         # @return [Hash] Infomation of user.
         def get_info2
             json = post_ssl(@zaif_trade_url, "get_info2", {})
+            # Convert to datetime
+            json["datetime"] = Time.at(json["server_time"])
             return json
         end
 
@@ -162,6 +170,10 @@ module Zaif
         def withdraw_history(currency, option = {})
             option["currency"] = currency
             json = post_ssl(@zaif_trade_url, "withdraw_history", option)
+            # Convert to datetime
+            json.each do|k, v|
+                v["datetime"] = Time.at(v["timestamp"].to_i)
+            end
             return json
         end
 
@@ -171,6 +183,10 @@ module Zaif
         def deposit_history(currency, option = {})
             option["currency"] = currency
             json = post_ssl(@zaif_trade_url, "deposit_history", option)
+            # Convert to datetime
+            json.each do|k, v|
+                v["datetime"] = Time.at(v["timestamp"].to_i)
+            end
             return json
         end
 
