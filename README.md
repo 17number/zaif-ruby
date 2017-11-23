@@ -43,10 +43,14 @@ api.get_currencies("btc")
 api.get_currency_pairs               # all currencies
 api.get_currency_pairs("btc")        # BTC/JPY
 api.get_currency_pairs("bch", "btc") # BCH/BTC
-api.get_last_price("btc")
-api.get_ticker("btc")
-api.get_trades("btc")
-api.get_depth("btc")
+api.get_last_price("btc")            # BTC/JPY
+api.get_last_price("bch", "btc")     # BCH/BTC
+api.get_ticker("btc")                # BTC/JPY
+api.get_ticker("bch", "btc")         # BCH/BTC
+api.get_trades("btc")                # BTC/JPY
+api.get_trades("bch", "btc")         # BCH/BTC
+api.get_depth("btc")                 # BTC/JPY
+api.get_depth("bch", "btc")          # BCH/BTC
 ```
 
 #### Trade API
