@@ -57,6 +57,8 @@ api.ask("btc", 30320, 0.0001, nil, "comments") # with comments
 api.bid("btc", 30760, 0.0001, 30780, "comments") # with limit and comments
 api.cancel(12345678)
 api.withdraw("btc", "InputAddress", 0.0001)
+api.withdraw("btc", "InputAddress", 0.0001, :opt_fee => 0.0001) # with fee(for BTC or MONA)
+api.withdraw("btc", "InputAddress", 0.0001, :message => "message") # with message(for XEM)
 api.withdraw_history("btc")
 api.deposit_history("btc")
 ```
