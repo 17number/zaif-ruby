@@ -160,14 +160,14 @@ module Zaif
         end
 
         # Issue bid order.
-        # Avalible options: currency_pair
+        # Avalible options: limit, comment
         # Need api key.
         def bid(currency_code, price, amount, counter_currency_code = "jpy", option: {})
             return trade(currency_code, price, amount, "bid", counter_currency_code, option: option)
         end
 
         # Issue ask order.
-        # Avalible options: currency_pair
+        # Avalible options: limit, comment
         # Need api key.
         def ask(currency_code, price, amount, counter_currency_code = "jpy", option: {})
             return trade(currency_code, price, amount, "ask", counter_currency_code, option: option)
