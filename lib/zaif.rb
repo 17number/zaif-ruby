@@ -143,6 +143,7 @@ module Zaif
 
             return json
         end
+
         # Issue trade.
         # Need api key.
         def trade(currency_code, price, amount, action, limit = nil, comment = nil, counter_currency_code = "jpy")
@@ -168,8 +169,9 @@ module Zaif
 
         # Cancel order.
         # Need api key.
-        def cancel(order_id)
-            json = post_ssl(@zaif_trade_url, "cancel_order", {:order_id => order_id})
+        def cancel(currency_code, order_id, counter_currency_code = "jpy")
+            currency_pair = currency_code + "_" + counter_currency_code
+            json = post_ssl(@zaif_trade_url, "cancel_order", {:order_id => order_id, :currency_pair => currency_pair})
             return json
         end
 
