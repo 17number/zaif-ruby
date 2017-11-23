@@ -21,22 +21,22 @@ Or install it yourself as:
 
 ### Initialize
 
-#### For api key access:
+#### For api key access
 
 ```ruby
 require 'zaif'
 api = Zaif::API.new(:api_key => ZAIF_KEY, :api_secret => ZAIF_SECRET)
 ```
-#### For oauth token access:
+#### [For oauth token access](http://techbureau-api-document.readthedocs.io/ja/latest/oauth/1_common.html)
 
 ```ruby
 require 'zaif'
 api = Zaif::API.new(:token => ZAIF_ACCESS_TOKEN)
 ```
 
-### APIs
+### [APIs](http://techbureau-api-document.readthedocs.io/ja/latest/index.html)
 
-#### Public API
+#### [Public API](http://techbureau-api-document.readthedocs.io/ja/latest/public/index.html)
 ```ruby
 api.get_currencies                   # all currencies
 api.get_currencies("btc")
@@ -53,7 +53,7 @@ api.get_depth("btc")                 # BTC/JPY
 api.get_depth("bch", "btc")          # BCH/BTC
 ```
 
-#### Trade API
+#### [Trade API](http://techbureau-api-document.readthedocs.io/ja/latest/trade/index.html)
 ```ruby
 api.get_info
 api.get_info2
@@ -72,11 +72,11 @@ api.withdraw_history("btc")
 api.deposit_history("btc")
 ```
 
-#### Futures Public API
+#### [Futures Public API](http://techbureau-api-document.readthedocs.io/ja/latest/public_futures/index.html)
 ```ruby
 ```
 
-#### Leverage Trade API
+#### [Leverage Trade API](http://techbureau-api-document.readthedocs.io/ja/latest/trade_leverage/index.html)
 ```ruby
 ```
 
