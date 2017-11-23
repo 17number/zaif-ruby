@@ -85,7 +85,9 @@ api.bid("btc", 30760, 0.0001, 30780) # with limit
 api.ask("btc", 30320, 0.0001, nil, "comments") # with comments
 api.bid("btc", 30760, 0.0001, 30780, "comments") # with limit and comments
 
-api.cancel(12345678)
+api.cancel("btc", 12345678) # BTC/JPY
+api.cancel("bch", 12345678) # BCH/JPY
+api.cancel("bch", 12345678, "btc") # BCH/BTC
 
 api.withdraw("btc", "InputAddress", 0.0001)
 api.withdraw("btc", "InputAddress", 0.0001, :opt_fee => 0.0001) # with fee(for BTC or MONA)
