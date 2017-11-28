@@ -126,7 +126,7 @@ api.deposit_history("btc", :since => Time.local(2017, 11, 20).to_i, :end => Time
 ```ruby
 ```
 
-#### Public Stream API
+#### [Public Stream API](http://techbureau-api-document.readthedocs.io/ja/latest/public/3_streaming.html)
 ```ruby
 ```
 
