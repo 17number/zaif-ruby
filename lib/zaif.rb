@@ -40,8 +40,27 @@ module Zaif
         # Public API
         #
 
+        # Get currencies.
+        # @param [String]  currency_code  Base currency code
+        def get_currencies(currency_code = "all")
+            json = get_ssl(@zaif_public_url + "currencies/" + currency_code)
+            return json
+        end
+
+        # Get currency_pairs.
+        # @param [String]  currency_code          Base currency code
+        # @param [String]  counter_currency_code  Counter currency code
+        def get_currency_pairs(currency_code = "all", counter_currency_code = "jpy")
+            if currency_code == "all"
+                json = get_ssl(@zaif_public_url + "currency_pairs/" + currency_code)
+            else
+                json = get_ssl(@zaif_public_url + "currency_pairs/" + currency_code + "_" + counter_currency_code)
+            end
+            return json
+        end
+
         # Get last price of *currency_code* / *counter_currency_code*.
-        # @param [String]  currency_code Base     currency code
+        # @param [String]  currency_code          Base currency code
         # @param [String]  counter_currency_code  Counter currency code
         def get_last_price(currency_code, counter_currency_code = "jpy")
             json = get_ssl(@zaif_public_url + "last_price/" + currency_code + "_" + counter_currency_code)
@@ -49,7 +68,7 @@ module Zaif
         end
 
         # Get ticker of *currency_code* / *counter_currency_code*.
-        # @param [String]  currency_code Base     currency code
+        # @param [String]  currency_code          Base currency code
         # @param [String]  counter_currency_code  Counter currency code
         def get_ticker(currency_code, counter_currency_code = "jpy")
             json = get_ssl(@zaif_public_url + "ticker/" + currency_code + "_" + counter_currency_code)
@@ -57,15 +76,19 @@ module Zaif
         end
 
         # Get trades of *currency_code* / *counter_currency_code*.
-        # @param [String]  currency_code Base     currency code
+        # @param [String]  currency_code          Base currency code
         # @param [String]  counter_currency_code  Counter currency code
         def get_trades(currency_code, counter_currency_code = "jpy")
             json = get_ssl(@zaif_public_url + "trades/" + currency_code + "_" + counter_currency_code)
+            # Convert to datetime
+            json.each do |j|
+                j["datetime"] = Time.at(j["date"].to_i)
+            end
             return json
         end
 
         # Get depth of *currency_code* / *counter_currency_code*.
-        # @param [String]  currency_code Base     currency code
+        # @param [String]  currency_code          Base currency code
         # @param [String]  counter_currency_code  Counter currency code
         def get_depth(currency_code, counter_currency_code = "jpy")
             json = get_ssl(@zaif_public_url + "depth/" + currency_code + "_" + counter_currency_code)
@@ -81,6 +104,8 @@ module Zaif
         # @return [Hash] Infomation of user.
         def get_info
             json = post_ssl(@zaif_trade_url, "get_info", {})
+            # Convert to datetime
+            json["datetime"] = Time.at(json["server_time"])
             return json
         end
 
@@ -89,6 +114,8 @@ module Zaif
         # @return [Hash] Infomation of user.
         def get_info2
             json = post_ssl(@zaif_trade_url, "get_info2", {})
+            # Convert to datetime
+            json["datetime"] = Time.at(json["server_time"])
             return json
         end
 
@@ -118,36 +145,46 @@ module Zaif
 
             return json
         end
+
         # Issue trade.
+        # Avalible options: limit, comment
         # Need api key.
-        def trade(currency_code, price, amount, action, limit = nil, counter_currency_code = "jpy")
+        def trade(currency_code, price, amount, action, counter_currency_code = "jpy", option: {})
             currency_pair = currency_code + "_" + counter_currency_code
-            params = {:currency_pair => currency_pair, :action => action, :price => price, :amount => amount}
-            params.store(:limit, limit) if limit
-            json = post_ssl(@zaif_trade_url, "trade", params)
+            option = option.merge({
+                currency_pair: currency_pair,
+                action: action,
+                price: price,
+                amount: amount,
+            })
+            json = post_ssl(@zaif_trade_url, "trade", option)
             return json
         end
 
         # Issue bid order.
+        # Avalible options: limit, comment
         # Need api key.
-        def bid(currency_code, price, amount, limit = nil, counter_currency_code = "jpy")
-            return trade(currency_code, price, amount, "bid", limit, counter_currency_code)
+        def bid(currency_code, price, amount, counter_currency_code = "jpy", option: {})
+            return trade(currency_code, price, amount, "bid", counter_currency_code, option: option)
         end
 
         # Issue ask order.
+        # Avalible options: limit, comment
         # Need api key.
-        def ask(currency_code, price, amount, limit = nil, counter_currency_code = "jpy")
-            return trade(currency_code, price, amount, "ask", limit, counter_currency_code)
+        def ask(currency_code, price, amount, counter_currency_code = "jpy", option: {})
+            return trade(currency_code, price, amount, "ask", counter_currency_code, option: option)
         end
 
         # Cancel order.
         # Need api key.
-        def cancel(order_id)
-            json = post_ssl(@zaif_trade_url, "cancel_order", {:order_id => order_id})
+        def cancel(currency_code, order_id, counter_currency_code = "jpy")
+            currency_pair = currency_code + "_" + counter_currency_code
+            json = post_ssl(@zaif_trade_url, "cancel_order", {:order_id => order_id, :currency_pair => currency_pair})
             return json
         end
 
         # Withdraw funds.
+        # Avalible options: opt_fee, message
         # Need api key.
         def withdraw(currency_code, address, amount, option = {})
             option["currency"] = currency_code
@@ -163,6 +200,10 @@ module Zaif
         def withdraw_history(currency, option = {})
             option["currency"] = currency
             json = post_ssl(@zaif_trade_url, "withdraw_history", option)
+            # Convert to datetime
+            json.each do|k, v|
+                v["datetime"] = Time.at(v["timestamp"].to_i)
+            end
             return json
         end
 
@@ -172,6 +213,10 @@ module Zaif
         def deposit_history(currency, option = {})
             option["currency"] = currency
             json = post_ssl(@zaif_trade_url, "deposit_history", option)
+            # Convert to datetime
+            json.each do|k, v|
+                v["datetime"] = Time.at(v["timestamp"].to_i)
+            end
             return json
         end
 
@@ -414,7 +459,7 @@ module Zaif
 
         def get_nonce
             time = Time.now.to_f
-            return time.to_i
+            return time
         end
 
         def get_cool_down
