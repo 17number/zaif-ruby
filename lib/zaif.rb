@@ -280,6 +280,12 @@ module Zaif
             option["type"] = type
             option["group_id"] = group_id
             json = post_ssl(@zaif_leverage_trade_url, "get_positions", option)
+            # Convert to datetime
+            json.each do|k, v|
+                v["datetime"] = Time.at(v["timestamp"].to_i)
+                v["datetime_end"] = Time.at(v["term_end"].to_i)
+                v["datetime_closed"] = Time.at(v["timestamp_closed"].to_i)
+            end
             return json
         end
 
@@ -296,6 +302,10 @@ module Zaif
             end
 
             json = post_ssl(@zaif_leverage_trade_url, "position_history", option)
+            # Convert to datetime
+            json.each do|k, v|
+                v["datetime"] = Time.at(v["timestamp"].to_i)
+            end
             return json
         end
 
@@ -313,6 +323,11 @@ module Zaif
                 option["currency_pair"] = currency_pair
             end
             json = post_ssl(@zaif_leverage_trade_url, "active_positions", option)
+            # Convert to datetime
+            json.each do|k, v|
+                v["datetime"] = Time.at(v["timestamp"].to_i)
+                v["datetime_end"] = Time.at(v["term_end"].to_i)
+            end
             return json
         end
 
@@ -329,6 +344,9 @@ module Zaif
             params.store(:stop, stop) if stop
             params.store(:group_id, group_id) if group_id
             json = post_ssl(@zaif_leverage_trade_url, "create_position", params)
+            # Convert to datetime
+            json["datetime"] = Time.at(json["timestamp"].to_i)
+            json["datetime_end"] = Time.at(json["term_end"].to_i)
             return json
         end
 
@@ -340,6 +358,8 @@ module Zaif
             params.store(:limit, limit) if limit
             params.store(:stop, stop) if stop
             json = post_ssl(@zaif_leverage_trade_url, "change_position", params)
+            # Convert to datetime
+            json["datetime_closed"] = Time.at(json["timestamp_closed"].to_i)
             return json
         end
 
@@ -349,6 +369,8 @@ module Zaif
             params = {:type => type, :leverage_id => leverage_id}
             params.store(:group_id, group_id) if group_id
             json = post_ssl(@zaif_leverage_trade_url, "cancel_position", params)
+            # Convert to datetime
+            json["datetime_closed"] = Time.at(json["timestamp_closed"].to_i)
             return json
         end
 
