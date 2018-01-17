@@ -276,7 +276,7 @@ module Zaif
         # Avalible options: from. count, from_id, end_id, order, since, end, currency_pair
         # Need api key.
         # @return [Hash] Infomation of positions
-        def get_leverage_positions(type, group_id = nil, option = {})
+        def get_leverage_positions(type: "margin", group_id: nil, option: {})
             option["type"] = type
             option["group_id"] = group_id if group_id
             json = post_ssl(@zaif_leverage_trade_url, "get_positions", option)
