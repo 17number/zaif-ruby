@@ -7,8 +7,8 @@ require 'net/http'
 require 'time'
 require 'websocket-client-simple'
 
-require "zaif/version"
-require "zaif/exceptions"
+require_relative "./zaif/version"
+require_relative "./zaif/exceptions"
 
 module Zaif
     class API
