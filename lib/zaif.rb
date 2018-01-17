@@ -278,7 +278,7 @@ module Zaif
         # @return [Hash] Infomation of positions
         def get_leverage_positions(type, group_id = nil, option = {})
             option["type"] = type
-            option["group_id"] = group_id
+            option["group_id"] = group_id if group_id
             json = post_ssl(@zaif_leverage_trade_url, "get_positions", option)
             # Convert to datetime
             json.each do|k, v|
